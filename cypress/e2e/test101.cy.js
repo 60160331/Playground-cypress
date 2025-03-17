@@ -23,7 +23,7 @@ describe('functionality', () => {
   it('Verify can be remove some tag one by one', () => {//ลบจากการกดกากบาทโดยที่ลบไม่หมด
     cy.visit(urlQa);
     cy.get('ul > :nth-child(2) > .uit').click();
-    cy.get('p > span').should("contain.text", "9");
+    cy.get('ul > li').should('have.length', 1);
   })
   
   it('Verify can be remove all the tag one by one', () => {//ลบจากการกดกากบาททีละอันจนหมด
@@ -37,7 +37,7 @@ describe('functionality', () => {
     cy.get('ul > li > .uit').each(($el) => {
     cy.wrap($el).click(); 
     });
-     cy.get('p > span').should("contain.text", "0");
+     cy.get('ul > li').should('have.length', 0);
   })
 
   it('Verify remove all button is worked', () => {//ลบจากการกด remove all
@@ -47,7 +47,7 @@ describe('functionality', () => {
         .type(`Cypress Test${i}{enter}`);
     }
     cy.get('button').click();
-    cy.get('p>span').should("contain.text", 0);
+    cy.get('ul > li').should('have.length', 0);
   });
 
   it('ตรวจสอบว่าผู้ใช้สามารถเพิ่มหลาย ๆ tag ได้จากการใส่ comma', () => {
@@ -89,5 +89,15 @@ describe('functionality', () => {
     }
   });
 
+  it('การตรวจสอบว่าไม่สามารถเพิ่มแท็กเกิน 10 อัน', () => {
+    cy.visit(urlQa);
+    cy.get('button').click();
+    cy.get('p>span').should("contain.text", 0);
+    for (let i = 1; i <= 12; i++){
+      cy.get('body > main > div > div.content > ul > input[type=text]')
+        .type(`Test${i}{enter}`);
+    }
+    cy.get('ul > li').should('have.length', 10);
+  });
 
 });
