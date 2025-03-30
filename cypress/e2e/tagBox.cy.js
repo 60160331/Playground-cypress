@@ -1,11 +1,11 @@
-
-
-const urlQa = "https://qaplayground.dev/apps/tags-input-box/";
+describe('Sortable List - Richest People', () => {
+  beforeEach(() => {
+    cy.visit('https://qaplayground.dev/apps/tags-input-box/');
+  });
 
 describe('functionality', () => {
 
   it('verify the default value of tag input', () => {
-    cy.visit(urlQa);
     cy.get('ul > :nth-child(1)')
       .should("contain.text", "node");
     cy.get('ul > :nth-child(2)')
@@ -13,7 +13,6 @@ describe('functionality', () => {
   });
 
   it('Verify if the input box is displayed correctly and can be add the new tag', () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .should('be.visible')//ตรวจว่า input ox นี้มีอยู่
       .type('Wow') // พิมพ์ได้
@@ -21,13 +20,11 @@ describe('functionality', () => {
   });
 
   it('Verify can be remove some tag one by one', () => {//ลบจากการกดกากบาทโดยที่ลบไม่หมด
-    cy.visit(urlQa);
     cy.get('ul > :nth-child(2) > .uit').click();
     cy.get('ul > li').should('have.length', 1);
   })
   
   it('Verify can be remove all the tag one by one', () => {//ลบจากการกดกากบาททีละอันจนหมด
-    cy.visit(urlQa);
   // พิมพ์ "Cypress Test1" ถึง "Cypress Test5" แล้วกด Enter
   for (let i = 1; i <= 5; i++) {
     cy.get('body > main > div > div.content > ul > input[type=text]')
@@ -42,7 +39,6 @@ describe('functionality', () => {
   })
 
   it('Verify remove all button is worked', () => {//ลบจากการกด remove all
-    cy.visit(urlQa);
     for (let i = 1; i <= 5; i++) {
       cy.get('body > main > div > div.content > ul > input[type=text]')
         .type(`Cypress Test${i}{enter}`);
@@ -52,7 +48,6 @@ describe('functionality', () => {
   });
 
   it('ตรวจสอบว่าผู้ใช้สามารถเพิ่มหลาย ๆ tag ได้จากการใส่ comma', () => {
-    cy.visit(urlQa);
     // clear ค่า default
     cy.get('ul > li > .uit').each(($el) => {
       cy.wrap($el).click();
@@ -64,7 +59,6 @@ describe('functionality', () => {
   });
 
   it('ตรวจสอบจำนวน tag ที่ใส่ได้หลังจากเพิ่ม tag', () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('Test1,Test2{enter}');
     cy.get('p > span').should("contain.text", "6");
@@ -75,7 +69,6 @@ describe('functionality', () => {
   })
 
   it('ตรวจสอบจำนวน tag ที่ใส่ได้หลังจากลบ tag', () => {
-    cy.visit(urlQa);
     for (let i = 1; i <= 8; i++) {
       cy.get('body > main > div > div.content > ul > input[type=text]')
         .type(`Test${i}{enter}`);
@@ -91,7 +84,6 @@ describe('functionality', () => {
   });
 
   it('การตรวจสอบว่าไม่สามารถเพิ่มแท็กเกิน 10 อัน [กรณีใส่ทีละอัน]', () => {
-    cy.visit(urlQa);
     cy.get('button').click();
     cy.get('p>span').should("contain.text", 0);
     for (let i = 1; i <= 12; i++){
@@ -101,7 +93,6 @@ describe('functionality', () => {
     cy.get('ul > li').should('have.length', 10);
   });
     it('การตรวจสอบว่าไม่สามารถเพิ่มแท็กเกิน 10 อัน [กรณีใส่ทีเดียวเกิน 10 จากการใช้ comma]', () => {
-    cy.visit(urlQa);
     cy.get('button').click();// clear ค่า default
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('Test1,Test2,Test3,Test4,Test5,Test6,Test7,Test8,Test9,Test10,Test11,Test,12{enter}');
@@ -113,28 +104,24 @@ describe('functionality', () => {
 describe("Validation", () => {
 
   it("ตรวจสอบว่าผู้ใช้ไม่สามารถเพิ่ม tag ที่ว่างเปล่าได้", () => {
-    cy.visit(urlQa);
     cy.get('button').click();// clear ค่า default
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type(' {enter}');
     cy.get('ul > li').should('have.length', 0);
   });
   it("ตรวจสอบว่าผู้ใช้ไม่สามารถเพิ่ม tag ที่ว่างเปล่าได้ [กรณีใส่ช่องว่าง 2 อันโดยมี comma คั่น]", () => {
-    cy.visit(urlQa);
     cy.get('button').click();// clear ค่า default
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type(' , {enter}');
     cy.get('ul > li').should('have.length', 0);
   });
   it("ตรวจสอบว่าผู้ใช้ไม่สามารถเพิ่ม tag ซ้ำได้[กรณีใส่ทีละอัน]", () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('javascript{enter}')
       .type('node{enter}');
     cy.get('ul > li').should('have.length', 2);
   });
   it("ตรวจสอบว่าหาก tag ซ้ำกันแต่มีตัวพิมพ์เล็ก-ใหญ่ต่างกัน จะถือว่าเป็น tag เดียวกัน และไม่สามารถเพิ่มได้", () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('jAVascript{enter}')
       .type('Node{enter}');
@@ -142,14 +129,12 @@ describe("Validation", () => {
     .and('have.length', 2);
   });
   it("ตรวจสอบว่าผู้ใช้ไม่สามารถเพิ่ม tag ซ้ำได้[กรณีใส่หลายอันโดยใช้ comma]", () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('node,javascript{enter}')
     cy.get('ul > li').should('have.length', 2);
   });
   it("ตรวจสอบ white space ตรงกลาง", () => {
     //ถ้าผู้ใช้พิมพ์ " test " แล้วกด Enter → ระบบควรตัดช่องว่างออกให้เหลือ "test"
-    cy.visit(urlQa);
     cy.get('button').click();// clear ค่า default
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('Hello world{enter}');
@@ -158,7 +143,6 @@ describe("Validation", () => {
   })
 
   it("ตรวจสอบว่า tag ว่าสามารถเพิ่มอักขระพิเศษได้", () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('!@#$%^&*()_+{}?><', { parseSpecialCharSequences: false }) // ✅ Cypress จะพิมพ์ข้อความตรงๆ
       .type('{enter}'); 
@@ -166,7 +150,6 @@ describe("Validation", () => {
       .should("contain.text", "!@#$%^&*()_+{}?><");
   });
     it("ตรวจสอบว่า tag ว่าเป็นตัวเลขได้", () => {
-    cy.visit(urlQa);
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('12345678909876') 
       .type('{enter}'); 
@@ -177,7 +160,6 @@ describe("Validation", () => {
 });
 describe("Edge Cases", ()=>{
   it("ตรวจสอบว่าเมื่อ refresh หน้าเว็บ tag ที่เพิ่มเข้ามาจะหายไป", () => {
-    cy.visit(urlQa);
     for (let i = 1; i <= 8; i++) {
       cy.get('body > main > div > div.content > ul > input[type=text]')
         .type(`Test${i}{enter}`);
@@ -186,7 +168,6 @@ describe("Edge Cases", ()=>{
     cy.get('ul > li').should('have.length', 2);//เหลือแต่ค่า default
   });
   it("ตรวจสอบว่าหากมี tag มากเกินไป input box จะขยายตาม", () => {
-    cy.visit(urlQa);
     cy.get('ul').invoke('width').then((widthBefore) => {
       cy.get('input[type="text"]').type('ThisIsAVeryLongTagThatShouldExpandTheContainer{enter}');
 
@@ -194,4 +175,5 @@ describe("Edge Cases", ()=>{
     });
   });
   
+});
   });
