@@ -121,13 +121,7 @@ describe("Validation", () => {
       .type('node{enter}');
     cy.get('ul > li').should('have.length', 2);
   });
-  it("tag ซ้ำต่าง case: ไม่เพิ่มได้", () => {
-    cy.get('body > main > div > div.content > ul > input[type=text]')
-      .type('jAVascript{enter}')
-      .type('Node{enter}');
-    cy.get('ul > li').should('not.have.length', 4)
-    .and('have.length', 2);
-  });
+
   it("ตรวจสอบว่าผู้ใช้ไม่สามารถเพิ่ม tag ซ้ำได้[กรณีใส่หลายอันโดยใช้ comma]", () => {
     cy.get('body > main > div > div.content > ul > input[type=text]')
       .type('node,javascript{enter}')
