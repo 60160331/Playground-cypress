@@ -18,7 +18,7 @@ describe("Funtionality", () => {
         }
         cy.get('body').should("not.contain.text", "Success")
         });
-    it("เช็คว่าสามารถแก้ไข Code ได้จากตำแหน่งตรงกลาง", () => {
+    it("To Check if can be edit code in the middle position", () => {
         cy.visit(urlQa);
         for (let i = 1; i < 7; i++) {
             cy.get(`.code-container > :nth-child(${i})`).type("8");
