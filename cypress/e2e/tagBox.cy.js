@@ -134,7 +134,14 @@ describe("Validation", () => {
       .type('Hello world{enter}');
     cy.get('ul > :nth-child(1)')
       .should("contain.text", "Hello world");
-  })
+  });
+  it("tag ซ้ำต่าง case: ไม่เพิ่มได้", () => {
+    cy.get('body > main > div > div.content > ul > input[type=text]')
+      .type('jAVascript{enter}')
+      .type('Node{enter}');
+    cy.get('ul > li').should('not.have.length', 4)
+    .and('have.length', 2);
+  });
 
   it("ตรวจสอบว่า tag ว่าสามารถเพิ่มอักขระพิเศษได้", () => {
     cy.get('body > main > div > div.content > ul > input[type=text]')
